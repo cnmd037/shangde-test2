@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>志愿服务平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 注册界面 */
+        .register-page {
+            padding: 40px 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .register-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .register-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 50px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.9);
+            font-size: 16px;
+            color: #333;
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        .register-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .register-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .login-link {
+            margin-top: 30px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .login-link a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* 主界面 */
+        .main-page {
+            display: none;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        .content {
+            padding: 20px;
+            padding-bottom: 90px;
+        }
+
+        /* 九宫格样式 */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .grid-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 10px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .grid-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .grid-text {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* 不同模块的主题色 */
+        .team-overview .grid-icon { background: linear-gradient(45deg, #667eea, #764ba2); color: white; }
+        .education .grid-icon { background: linear-gradient(45deg, #f093fb, #f5576c); color: white; }
+        .services .grid-icon { background: linear-gradient(45deg, #4facfe, #00f2fe); color: white; }
+        .volunteer .grid-icon { background: linear-gradient(45deg, #43e97b, #38f9d7); color: white; }
+
+        /* 视频区域 */
+        .video-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .video-upload {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-upload:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .video-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .video-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-item:hover {
+            background: #e9ecef;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 80px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            height: 70px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #999;
+        }
+
+        .nav-item.active {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .nav-text {
+            font-size: 12px;
+        }
+
+        /* 隐藏非激活页面 */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 375px) {
+            .grid-container {
+                gap: 12px;
+            }
+            
+            .grid-item {
+                padding: 15px 8px;
+                min-height: 90px;
+            }
+            
+            .grid-icon {
+                width: 35px;
+                height: 35px;
+                font-size: 18px;
+            }
+            
+            .grid-text {
+                font-size: 13px;
+            }
+        }
+
+        /* 动画效果 */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 注册界面 -->
+        <div class="register-page" id="registerPage">
+            <div class="logo">🤝</div>
+            <h1 class="register-title">志愿服务平台</h1>
+            <p class="register-subtitle">用爱心传递温暖，用行动践行责任</p>
+            
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="请输入手机号" id="phone">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="请输入验证码" id="verifyCode">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="请输入姓名" id="name">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-input" placeholder="请输入密码" id="password">
+            </div>
+            
+            <button class="register-btn" onclick="register()">注册</button>
+            
+            <div class="login-link">
+                已有账号？<a href="#" onclick="showLogin()">立即登录</a>
+            </div>
+        </div>
+
+        <!-- 主界面 -->
+        <div class="main-page" id="mainPage">
+            <div class="header">
+                <h1>志愿服务平台</h1>
+            </div>
+
+            <div class="content">
+                <!-- 团队概况 -->
+                <div class="tab-content active team-overview" id="teamOverview">
+                    <h2 class="section-title">团队概况</h2>
+                    <div class="grid-container">
+                        <div class="grid-item" onclick="showDetail('团队介绍')">
+                            <div class="grid-icon">📋</div>
+                            <div class="grid-text">团队介绍</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('团队成员')">
+                            <div class="grid-icon">👥</div>
+                            <div class="grid-text">团队成员</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('服务定位')">
+                            <div class="grid-icon">🎯</div>
+                            <div class="grid-text">服务定位</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('发展规模')">
+                            <div class="grid-icon">📈</div>
+                            <div class="grid-text">发展规模</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('服务目标')">
+                            <div class="grid-icon">🎪</div>
+                            <div class="grid-text">服务目标</div>
+                        </div>
+                        <div class="grid-item" onclick="showDetail('更多信息')">
+                            <div class="grid-icon">➕</div>
+                            <div class="grid-text">更多</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 养老课堂 -->
+                <div class="tab-content education" id="education">
+                    <h2 class="section-title">养老课堂</h2>
+                    <div class="video-section">
+                        <div class="video-upload" onclick="uploadVideo()">
+                            <div class="upload-icon">📹</div>
+                            <div>点击上传视频</div>
+                            <small style="color: #999;">支持mp4、avi等格式</small>
+                        </div>
+                        
+                        <div class="video-list">
+                            <div class="video-item" onclick="playVideo('健康养生基础知识')">
+                                <div class="video-thumbnail">▶️</div>
+                                <div style="font-size: 14px;">健康养生基础知识</div>
+                            </div>
+                            <div class="video-item" onclick="playVideo('老年人心理关怀')">
+                                <div class="video-thumbnail">▶️</div>
+                                <div style="font-size: 14px;">老年人心理关怀</div>
+                            </div>
+                            <div class="video-item" onclick="playVideo('居家安全指导')">
+                                <div class="video-thumbnail">▶️</div>
+                                <div style="font-size: 14px;">居家安全指导</div>
+                            </div>
+                            <div class="video-item" onclick="playVideo('营养膳食搭配')">
+                                <div class="video-thumbnail">▶️</div>
+                                <div style="font-size: 14px;">营养膳食搭配</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 服务清单 -->
+                <div class="tab-content services" id="services">
+                    <h2 class="section-title">服务清单</h2>
+                    <div class="grid-container">
+                        <div class="grid-item" onclick="showService('智慧生活')">
+                            <div class="grid-icon">💡</div>
+                            <div class="grid-text">智慧生活</div>
+                        </div>
+                        <div class="grid-item" onclick="showService('生活协助')">
+                            <div class="grid-icon">🤝</div>
+                            <div class="grid-text">生活协助</div>
+                        </div>
+                        <div class="grid-item" onclick="showService('出行陪伴')">
+                            <div class="grid-icon">🚗</div>
+                            <div class="grid-text">出行陪伴</div>
+                        </div>
+                        <div class="grid-item" onclick="showService('医疗体娱')">
+                            <div class="grid-icon">🏥</div>
+                            <div class="grid-text">医疗体娱</div>
+                        </div>
+                        <div class="grid-item" onclick="showService('上门服务')">
+                            <div class="grid-icon">🏠</div>
+                            <div class="grid-text">上门服务</div>
+                        </div>
+                        <div class="grid-item" onclick="showService('更多服务')">
+                            <div class="grid-icon">⭐</div>
+                            <div class="grid-text">更多服务</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 志愿者管理 -->
+                <div class="tab-content volunteer" id="volunteer">
+                    <h2 class="section-title">志愿者管理</h2>
+                    <div class="grid-container">
+                        <div class="grid-item" onclick="showVolunteer('志愿者招募')">
+                            <div class="grid-icon">📢</div>
+                            <div class="grid-text">志愿者招募</div>
+                        </div>
+                        <div class="grid-item" onclick="showVolunteer('志愿者培训')">
+                            <div class="grid-icon">📚</div>
+                            <div class="grid-text">志愿者培训</div>
+                        </div>
+                        <div class="grid-item" onclick="showVolunteer('志愿者认证')">
+                            <div class="grid-icon">🎖️</div>
+                            <div class="grid-text">志愿者认证</div>
+                        </div>
+                        <div class="grid-item" onclick="showVolunteer('志愿者考核')">
+                            <div class="grid-icon">📊</div>
+                            <div class="grid-text">志愿者考核</div>
+                        </div>
+                        <div class="grid-item" onclick="showVolunteer('志愿者之星')">
+                            <div class="grid-icon">⭐</div>
+                            <div class="grid-text">志愿者之星</div>
+                        </div>
+                        <div class="grid-item" onclick="showVolunteer('管理中心')">
+                            <div class="grid-icon">⚙️</div>
+                            <div class="grid-text">管理中心</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部导航 -->
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="switchTab('teamOverview', this)">
+                    <div class="nav-icon">🏢</div>
+                    <div class="nav-text">团队概况</div>
+                </div>
+                <div class="nav-item" onclick="switchTab('education', this)">
+                    <div class="nav-icon">📚</div>
+                    <div class="nav-text">养元课堂</div>
+                </div>
+                <div class="nav-item" onclick="switchTab('services', this)">
+                    <div class="nav-icon">📋</div>
+                    <div class="nav-text">服务清单</div>
+                </div>
+                <div class="nav-item" onclick="switchTab('volunteer', this)">
+                    <div class="nav-icon">👥</div>
+                    <div class="nav-text">志愿者管理</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 注册功能
+        function register() {
+            const phone = document.getElementById('phone').value;
+            const verifyCode = document.getElementById('verifyCode').value;
+            const name = document.getElementById('name').value;
+            const password = document.getElementById('password').value;
+            
+            if (!phone || !verifyCode || !name || !password) {
+                alert('请填写完整信息');
+                return;
+            }
+            
+            // 模拟注册成功
+            alert('注册成功！');
+            showMainPage();
+        }
+
+        // 显示登录界面（这里简化为直接进入主界面）
+        function showLogin() {
+            showMainPage();
+        }
+
+        // 显示主界面
+        function showMainPage() {
+            document.getElementById('registerPage').style.display = 'none';
+            document.getElementById('mainPage').style.display = 'block';
+            document.getElementById('mainPage').classList.add('fade-in');
+        }
+
+        // 切换标签页
+        function switchTab(tabId, element) {
+            // 隐藏所有标签页内容
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // 显示选中的标签页内容
+            document.getElementById(tabId).classList.add('active');
+            
+            // 更新导航状态
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        // 显示详情（团队概况）
+        function showDetail(title) {
+            alert(`查看${title}详情`);
+        }
+
+        // 上传视频
+        function uploadVideo() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'video/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    alert(`上传视频：${file.name}`);
+                }
+            };
+            input.click();
+        }
+
+        // 播放视频
+        function playVideo(title) {
+            alert(`播放视频：${title}`);
+        }
+
+        // 显示服务详情
+        function showService(service) {
+            alert(`查看${service}服务详情`);
+        }
+
+        // 显示志愿者管理功能
+        function showVolunteer(feature) {
+            alert(`进入${feature}功能`);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 可以在这里添加初始化逻辑
+            console.log('志愿服务平台加载完成');
+        });
+    </script>
+</body>
+</html>
